@@ -1,21 +1,38 @@
-#include <NewPing.h> 
-const int TriggerPin = 3;
-const int TriggerPin2 = 6;
-const int EchoPin2 = 5; 
-const int EchoPin = 4; 
-NewPing sonar(TriggerPin, EchoPin, 100); 
-NewPing sonar2(TriggerPin2, EchoPin2, 100); 
+#include <NewPing.h>
 
-void setup() { 
- Serial.begin(9600); 
-} 
-void loop() { 
- int cm = sonar.ping_cm(); 
- int cm2 = sonar2.ping_cm();
- Serial.println("first"); 
- Serial.println(cm); 
- Serial.println("second"); 
- Serial.println(cm2); 
- //Serial.println('second',cm2); 
- delay(250); 
+const int ledPin = 13;
+
+const int leftSensorTriggerPin = 3;
+const int rightSensorTriggerPin = 6;
+const int rightSensorEchoPin = 5;
+const int leftSensorEchoPin = 4;
+
+const int goalDistance = 5;
+
+NewPing left_sensor(leftSensorTriggerPin, leftSensorEchoPin, 100);
+NewPing right_sensor(rightSensorTriggerPin, rightSensorEchoPin, 100);
+
+void setup() {
+	pinMode(ledPin,OUTPUT);
+	Serial.begin(9600);
+}
+
+void loop() {
+	digitalWrite(ledPin, LOW);
+
+	int leftDistance = left_sensor.ping_cm();
+	int rightDistance = right_sensor.ping_cm();
+
+	Serial.print("Left sensor:");
+	Serial.println(leftDistance);
+	Serial.print("Right sensor:");
+	Serial.println(rightDistance);
+
+	if(leftDistance < goalDistance || rightDistance < goalDistance ){
+		digitalWrite(ledPin, HIGH);
+		delay(5000);
+		digitalWrite(ledPin, LOW);
+	}
+
+	// delay(250);
 }
